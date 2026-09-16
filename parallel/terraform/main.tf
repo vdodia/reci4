@@ -86,52 +86,6 @@ resource "azurerm_linux_virtual_machine" "web_vm" {
   }
 }
 
-resource "azurerm_public_ip" "web_pip2" {
-  name                = "webServer-ip2"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  allocation_method   = "Static"
-  sku                 = "Standard"
-}
-
-resource "azurerm_network_interface" "web_nic2" {
-  name                = "webServer-nic2"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-
-  ip_configuration {
-    name                          = "web-ipcfg2"
-    subnet_id                     = azurerm_subnet.web.id
-    private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.web_pip2.id
-  }
-}
-
-resource "azurerm_linux_virtual_machine" "web_vm2" {
-  name                = "webServer2"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  size                            = "Standard_D2ls_v7"
-  admin_username                  = var.admin_username
-  admin_password                  = var.admin_password
-  disable_password_authentication = false
-  secure_boot_enabled             = true
-  vtpm_enabled                    = true
-  network_interface_ids           = [azurerm_network_interface.web_nic2.id]
-
-  os_disk {
-    caching              = "ReadWrite"
-    storage_account_type = "Standard_LRS"
-  }
-
-  source_image_reference {
-    publisher = "Canonical"
-    offer     = "ubuntu-24_04-lts"
-    sku       = "server"
-    version   = "latest"
-  }
-}
-
 output "web_public_ip" {
   value = azurerm_public_ip.web_pip.ip_address
 }
