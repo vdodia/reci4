@@ -36,17 +36,4 @@ az vm create \
   --nsg-rule NONE \
   --public-ip-sku Standard
 
-az vm create \
-  --resource-group "$RG" \
-  --name "webServer2" \
-  --image Canonical:ubuntu-24_04-lts:server:latest \
-  --size Standard_D2ls_v7 \
-  --admin-username azureuser \
-  --admin-password CloudAdmin123! \
-  --vnet-name testVNet \
-  --subnet webSubnet \
-  --nsg "$NSG" \
-  --nsg-rule NONE \
-  --public-ip-sku Standard
-
 echo "Done. ${VM} is up in ${RG}."
